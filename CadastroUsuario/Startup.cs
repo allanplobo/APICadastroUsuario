@@ -1,12 +1,16 @@
 
+using CadastroUsuario.Business.Servicos;
+using CadastroUsuario.Domain.Contratos.Repositorios;
+using CadastroUsuario.Domain.Contratos.Servicos;
+using CadastroUsuario.Domain.Contratos.Uow;
 using CadastroUsuario.Infra.Conexoes;
+using CadastroUsuario.Infra.Repositorios;
+using CadastroUsuario.Infra.Uow;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
 
 namespace CadastroUsuario
 {
@@ -15,12 +19,17 @@ namespace CadastroUsuario
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CadastroUsuarioSqliteDbContext>(opts =>
-                opts.UseSqlite("database=cadastroUsuario.db", sqlite => sqlite.MigrationsAssembly("CadastroUsuario.Infra")));
+                opts.UseSqlite("Data Source=cadastroUsuario.db", 
+                sqlite => sqlite.MigrationsAssembly("CadastroUsuario.Infra")));
 
             services.AddMvcCore((opts) =>
             {
                 opts.EnableEndpointRouting = false;
             });
+
+            services.AddScoped<IPerfilRepositorio, PerfilRepositorio>();
+            services.AddScoped<IPerfilServico, PerfilServico>();
+            services.AddScoped<IUow, UnidadeTrabalho>();
 
             services.AddCors((e) =>
                 e.AddPolicy("Dev", op => op

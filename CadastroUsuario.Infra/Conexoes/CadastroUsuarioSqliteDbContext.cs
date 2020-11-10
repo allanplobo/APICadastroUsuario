@@ -8,7 +8,7 @@ namespace CadastroUsuario.Infra.Conexoes
 {
     public class CadastroUsuarioSqliteDbContext:DbContext
     {
-        public CadastroUsuarioSqliteDbContext(DbContextOptions options) : base()
+        public CadastroUsuarioSqliteDbContext(DbContextOptions options) : base(options)
         {
 
         }
